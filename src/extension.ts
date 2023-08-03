@@ -46,6 +46,7 @@ function openFolderBasedOnUserSelection(codeFolder: any){
 
 export function activate(context: vscode.ExtensionContext) {
     let createTemplateHtmlCssJs = vscode.commands.registerCommand("struk.htm",() => {
+        console.log(context.extensionPath);
             vscode.window.showInputBox({ prompt: "Enter your project folder name" })
                 .then((projectName: any) => {
                     if (!projectName) {
@@ -60,7 +61,6 @@ export function activate(context: vscode.ExtensionContext) {
                         const projectFolderPath = path.join(wf, projectName);
                         const src = path.join(
                             extensionPath,
-                            "src",
                             "templates",
                             "htmlCssJsTemplate"
                         );
@@ -111,7 +111,6 @@ export function activate(context: vscode.ExtensionContext) {
                         fs.copyFile(
                             path.join(
                                 extensionPath,
-                                "src",
                                 "templates",
                                 "htmlCssJsTemplate",
                                 "index_bootstrap.html"
@@ -126,7 +125,6 @@ export function activate(context: vscode.ExtensionContext) {
                         fs.copyFile(
                             path.join(
                                 extensionPath,
-                                "src",
                                 "templates",
                                 "htmlCssJsTemplate",
                                 "style.css"
@@ -141,7 +139,6 @@ export function activate(context: vscode.ExtensionContext) {
                         fs.copyFile(
                             path.join(
                                 extensionPath,
-                                "src",
                                 "templates",
                                 "htmlCssJsTemplate",
                                 "index.js"
@@ -189,7 +186,6 @@ export function activate(context: vscode.ExtensionContext) {
                         }
                         const src = path.join(
                             extensionPath,
-                            "src",
                             "templates",
                             "reactTemplate"
                         );
