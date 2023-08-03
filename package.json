@@ -10,6 +10,7 @@
     "Other"
   ],
   "activationEvents": [],
+  "publisher": "zirith",
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
@@ -55,5 +56,10 @@
     "mocha": "^10.2.0",
     "typescript": "^5.1.3",
     "@vscode/test-electron": "^2.3.2"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zirith001/struk.git"
+  },
+  "homepage": "https://github.com/zirith001/struk/blob/main/README.md"
 }
