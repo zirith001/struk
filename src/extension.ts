@@ -45,45 +45,39 @@ function openFolderBasedOnUserSelection(codeFolder: any){
 }
 
 export function activate(context: vscode.ExtensionContext) {
-    let createTemplateHtmlCssJs = vscode.commands.registerCommand("struk.htm",() => {
+    let createTemplateHtmlCssJs = vscode.commands.registerCommand('struk.htm', () => {
         console.log(context.extensionPath);
-            vscode.window.showInputBox({ prompt: "Enter your project folder name" })
-                .then((projectName: any) => {
-                    if (!projectName) {
-                        vscode.window.showErrorMessage(
-                            "Please enter Project Folder name"
-                        );
-                        return;
+        vscode.window.showInputBox({ prompt: 'Enter your project folder name' }).then((projectName: string | undefined) => {
+            if (!projectName) {
+                vscode.window.showErrorMessage('Please enter Project Folder name');
+                return;
+            }
+            if (vscode.workspace.workspaceFolders !== undefined) {
+                const wf = vscode.workspace.workspaceFolders[0].uri.fsPath; // Use fsPath instead of path
+                const extensionPath = context.extensionPath;
+                const projectFolderPath = path.join(wf, projectName);
+
+                // Handle the destination folder path based on the platform
+                const isWindows = process.platform === 'win32';
+                const dest = isWindows ? projectFolderPath : path.posix.resolve(projectFolderPath);
+                const src = path.join(extensionPath, 'templates', 'htmlCssJsTemplate');
+                try {
+                    if (!fs.existsSync(dest)) {
+                        fs.mkdirSync(dest);
                     }
-                    if (vscode.workspace.workspaceFolders !== undefined) {
-                        let wf = vscode.workspace.workspaceFolders[0].uri.path;
-                        const extensionPath = context.extensionPath;
-                        const projectFolderPath = path.join(wf, projectName);
-                        const src = path.join(
-                            extensionPath,
-                            "templates",
-                            "htmlCssJsTemplate"
-                        );
-                        const dest = projectFolderPath;
-                        try {
-                            if (!fs.existsSync(projectFolderPath)) {
-                                fs.mkdirSync(projectFolderPath);
-                            }
-                        } catch (err) {
-                            console.error(err);
-                        }
-                        fs.cpSync(src, dest, { recursive: true });
-                        fs.unlinkSync(path.join(dest, "index_bootstrap.html"));
-                        openFolderBasedOnUserSelection(projectFolderPath);
-                    } else {
-                        let message;
-                        message =
-                            "Struk: Working folder not found, open a folder an try again";
-                        vscode.window.showErrorMessage(message);
-                    }
-                });
-        }
-    );
+                } catch (err) {
+                    console.error(err);
+                }
+                fs.copyFileSync(path.join(src, 'index.html'), path.join(dest, 'index.html'));
+                fs.copyFileSync(path.join(src, 'style.css'), path.join(dest, 'style.css'));
+                fs.copyFileSync(path.join(src, 'index.js'), path.join(dest, 'index.js'));
+                openFolderBasedOnUserSelection(projectFolderPath);
+            } else {
+                let message = 'Struk: Working folder not found, open a folder and try again';
+                vscode.window.showErrorMessage(message);
+            }
+        });
+    });
 
     let createTemplateHtmlCssBootstrapJs = vscode.commands.registerCommand(
         "struk.bootstrap",
@@ -98,13 +92,16 @@ export function activate(context: vscode.ExtensionContext) {
                         return;
                     }
                     if (vscode.workspace.workspaceFolders !== undefined) {
-                        let wf = vscode.workspace.workspaceFolders[0].uri.path;
+                        let wf = vscode.workspace.workspaceFolders[0].uri.fsPath;
                         const extensionPath = context.extensionPath;
                         const projectFolderPath = path.join(wf, projectName);
-                        try {
-                            if (!fs.existsSync(projectFolderPath)) {
-                                fs.mkdirSync(projectFolderPath);
-                            }
+                        const isWindows = process.platform === 'win32';
+                const dest = isWindows ? projectFolderPath : path.posix.resolve(projectFolderPath);
+                const src = path.join(extensionPath, 'templates', 'htmlCssJsTemplate');
+                try {
+                    if (!fs.existsSync(dest)) {
+                        fs.mkdirSync(dest);
+                    }
                         } catch (err) {
                             console.error(err);
                         }
@@ -174,22 +171,21 @@ export function activate(context: vscode.ExtensionContext) {
                         return;
                     }
                     if (vscode.workspace.workspaceFolders !== undefined) {
-                        let wf = vscode.workspace.workspaceFolders[0].uri.path;
+                        let wf = vscode.workspace.workspaceFolders[0].uri.fsPath;
                         const extensionPath = context.extensionPath;
                         const projectFolderPath = path.join(wf, projectName);
+
+                        const isWindows = process.platform === 'win32';
+                        const dest = isWindows ? projectFolderPath : path.posix.resolve(projectFolderPath);
+                        const src = path.join(extensionPath, 'templates', 'reactTemplate');
                         try {
-                            if (!fs.existsSync(projectFolderPath)) {
-                                fs.mkdirSync(projectFolderPath);
+                            if (!fs.existsSync(dest)) {
+                                fs.mkdirSync(dest);
                             }
                         } catch (err) {
                             console.error(err);
                         }
-                        const src = path.join(
-                            extensionPath,
-                            "templates",
-                            "reactTemplate"
-                        );
-                        const dest = projectFolderPath;
+                        
                         fs.cpSync(src, dest, { recursive: true });
                         vscode.window.withProgress(
                             {
@@ -316,11 +312,13 @@ export function activate(context: vscode.ExtensionContext) {
                     }
 
                     if (vscode.workspace.workspaceFolders !== undefined) {
-                        let wf = vscode.workspace.workspaceFolders[0].uri.path;
+                        let wf = vscode.workspace.workspaceFolders[0].uri.fsPath;
                         const projectFolderPath = path.join(wf, projectName);
+                        const isWindows = process.platform === 'win32';
+                        const dest = isWindows ? projectFolderPath : path.posix.resolve(projectFolderPath);
                         try {
-                            if (!fs.existsSync(projectFolderPath)) {
-                                fs.mkdirSync(projectFolderPath);
+                            if (!fs.existsSync(dest)) {
+                                fs.mkdirSync(dest);
                             }
                         } catch (err) {
                             console.error(err);
@@ -399,6 +397,4 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(createTemplatePython);
 }
 
-// This method is called when your extension is deactivated
 export function deactivate() { }
-//Starting Dev containers show new log
