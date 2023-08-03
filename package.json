@@ -1,7 +1,7 @@
 {
   "name": "struk",
   "displayName": "struk",
-  "description": "This extension provides generic template (i.e. struk(structure)) for html with css and js attached, html with bootstrap, css and js attached, python template and react basic template. With this you can just st run commands and create templates faster.",
+  "description": "Generic template for HTML, CSS & JS, React, Bootstrap and Python",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.80.0"
